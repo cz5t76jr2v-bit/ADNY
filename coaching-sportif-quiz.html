@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trouve ton Coaching Sportif</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #EDEAE1 0%, #7EC1A3 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15);
+            max-width: 650px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #F96A4D 0%, #ff8a73 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .content {
+            padding: 40px 35px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .emoji {
+            font-size: 1.4em;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option {
+            background: #EDEAE1;
+            padding: 18px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05em;
+        }
+
+        .option:hover {
+            background: #7EC1A3;
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: #7EC1A3;
+            color: white;
+            border-color: #000;
+        }
+
+        .option input[type="radio"] {
+            display: none;
+        }
+
+        .radio-custom {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #000;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .option.selected .radio-custom::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .btn {
+            background: #F96A4D;
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            font-size: 1.15em;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:hover {
+            background: #e85a3d;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(249, 106, 77, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .result-box {
+            background: linear-gradient(135deg, #7EC1A3 0%, #6ab091 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .result-box h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .result-box p {
+            font-size: 1.1em;
+            line-height: 1.7;
+            margin-bottom: 10px;
+        }
+
+        .formula-name {
+            background: #F96A4D;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 15px 0;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.15em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .whatsapp-btn:hover {
+            background: #20ba55;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #EDEAE1;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #F96A4D 0%, #7EC1A3 100%);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .step-indicator {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Trouve ton Coaching</h1>
+            <p>Quelques questions pour personnaliser ton accompagnement sportif</p>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="step-indicator" id="stepIndicator">Question 1 sur 5</div>
+
+            <!-- Page 1 -->
+            <div class="page active" id="page1">
+                <div class="question-title">
+                    <span class="emoji">🏃</span>
+                    <span>Quel est ton sport principal ?</span>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'sport', 'kine')">
+                        <input type="radio" name="sport" value="kine">
+                        <span class="radio-custom"></span>
+                        <span>🩺 Accompagnement kiné</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'sport', 'course')">
+                        <input type="radio" name="sport" value="course">
+                        <span class="radio-custom"></span>
+                        <span>👟 Course à pied</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'sport', 'triathlon')">
+                        <input type="radio" name="sport" value="triathlon">
+                        <span class="radio-custom"></span>
+                        <span>🏊‍♂️ Triathlon</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'sport', 'cyclisme')">
+                        <input type="radio" name="sport" value="cyclisme">
+                        <span class="radio-custom"></span>
+                        <span>🚴 Cyclisme</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'sport', 'natation')">
+                        <input type="radio" name="sport" value="natation">
+                        <span class="radio-custom"></span>
+                        <span>🏊 Natation</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'sport', 'autre')">
+                        <input type="radio" name="sport" value="autre">
+                        <span class="radio-custom"></span>
+                        <span>⚽ Autre sport</span>
+                    </label>
+                </div>
+                <button class="btn" onclick="nextPage(2)">Suivant →</button>
+            </div>
+
+            <!-- Page 2 -->
+            <div class="page" id="page2">
+                <div class="question-title">
+                    <span class="emoji">📊</span>
+                    <span>Quel est ton niveau ?</span>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'niveau', 'debutant')">
+                        <input type="radio" name="niveau" value="debutant">
+                        <span class="radio-custom"></span>
+                        <span>🌱 Débutant (moins d'un an)</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'niveau', 'intermediaire')">
+                        <input type="radio" name="niveau" value="intermediaire">
+                        <span class="radio-custom"></span>
+                        <span>📈 Intermédiaire (entre 1 et 3 ans)</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'niveau', 'confirme')">
+                        <input type="radio" name="niveau" value="confirme">
+                        <span class="radio-custom"></span>
+                        <span>💪 Confirmé</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'niveau', 'competition')">
+                        <input type="radio" name="niveau" value="competition">
+                        <span class="radio-custom"></span>
+                        <span>🥇 Compétition</span>
+                    </label>
+                </div>
+                <button class="btn" onclick="nextPage(3)">Suivant →</button>
+            </div>
+
+            <!-- Page 3 -->
+            <div class="page" id="page3">
+                <div class="question-title">
+                    <span class="emoji">🎯</span>
+                    <span>Quel est ton objectif principal ?</span>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'objectif', 'blessure')">
+                        <input type="radio" name="objectif" value="blessure">
+                        <span class="radio-custom"></span>
+                        <span>🩹 Je cherche à récupérer d'une blessure</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'objectif', 'forme')">
+                        <input type="radio" name="objectif" value="forme">
+                        <span class="radio-custom"></span>
+                        <span>😊 Forme et bien-être</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'objectif', 'preparer')">
+                        <input type="radio" name="objectif" value="preparer">
+                        <span class="radio-custom"></span>
+                        <span>🏁 Préparer une compétition</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'objectif', 'ameliorer')">
+                        <input type="radio" name="objectif" value="ameliorer">
+                        <span class="radio-custom"></span>
+                        <span>📈 Améliorer mes performances</span>
+                    </label>
+                </div>
+                <button class="btn" onclick="nextPage(4)">Suivant →</button>
+            </div>
+
+            <!-- Page 4 -->
+            <div class="page" id="page4">
+                <div class="question-title">
+                    <span class="emoji">💰</span>
+                    <span>Quel est le budget pour ton coaching ?</span>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'budget', '60-75')">
+                        <input type="radio" name="budget" value="60-75">
+                        <span class="radio-custom"></span>
+                        <span>60 à 75 euros / mois</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'budget', '75-95')">
+                        <input type="radio" name="budget" value="75-95">
+                        <span class="radio-custom"></span>
+                        <span>75 à 95 euros / mois</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'budget', '95-145')">
+                        <input type="radio" name="budget" value="95-145">
+                        <span class="radio-custom"></span>
+                        <span>95 à 145 euros / mois</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'budget', 'flexible')">
+                        <input type="radio" name="budget" value="flexible">
+                        <span class="radio-custom"></span>
+                        <span>💎 Budget flexible</span>
+                    </label>
+                </div>
+                <button class="btn" onclick="nextPage(5)">Suivant →</button>
+            </div>
+
+            <!-- Page 5 -->
+            <div class="page" id="page5">
+                <div class="question-title">
+                    <span class="emoji">📱</span>
+                    <span>Quel niveau de suivi préfères-tu ?</span>
+                </div>
+                <div class="options">
+                    <label class="option" onclick="selectOption(this, 'suivi', 'oneshot')">
+                        <input type="radio" name="suivi" value="oneshot">
+                        <span class="radio-custom"></span>
+                        <span>📋 Analyse one shot (analyse + bilan)</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'suivi', 'mensuel')">
+                        <input type="radio" name="suivi" value="mensuel">
+                        <span class="radio-custom"></span>
+                        <span>📅 Suivi mensuel</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'suivi', 'messages')">
+                        <input type="radio" name="suivi" value="messages">
+                        <span class="radio-custom"></span>
+                        <span>📞 Messages + appel mensuel</span>
+                    </label>
+                    <label class="option" onclick="selectOption(this, 'suivi', 'illimite')">
+                        <input type="radio" name="suivi" value="illimite">
+                        <span class="radio-custom"></span>
+                        <span>🌟 Suivi illimité et analyse</span>
+                    </label>
+                </div>
+                <button class="btn" onclick="showResult()">Voir ma formule →</button>
+            </div>
+
+            <!-- Page Résultat -->
+            <div class="page" id="pageResult">
+                <div class="result-box">
+                    <h2>✨ Ta formule idéale</h2>
+                    <div class="formula-name">« SANS DOSSARD »</div>
+                    <p>📊 Suivi personnalisé</p>
+                    <p>🎥 Analyse du mouvement</p>
+                    <p>🧘 Bilan posture</p>
+                </div>
+                <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 1.05em;">
+                    Pour discuter de ta formule idéale et obtenir plus d'informations 👇
+                </p>
+                <div style="text-align: center;">
+                    <a href="https://wa.me/33781967699?text=Bonjour%2C%0AJe%20viens%20de%20r%C3%A9aliser%20votre%20questionnaire%20sur%20le%20coaching.%0AMa%20formule%20recommand%C3%A9e%20est%20%C2%AB%20Sans%20Dossard%20%C2%BB.%0APouvez-vous%20me%20donner%20plus%20d'informations%20sur%20cette%20formule%3F%0AMerci" class="whatsapp-btn" target="_blank">
+                        <span style="font-size: 1.5em;">💬</span>
+                        Me contacter sur WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const totalPages = 5;
+        const answers = {};
+
+        function selectOption(element, category, value) {
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            answers[category] = value;
+        }
+
+        function nextPage(pageNumber) {
+            const currentPageElement = document.getElementById('page' + currentPage);
+            const nextPageElement = document.getElementById('page' + pageNumber);
+            
+            const inputName = currentPageElement.querySelector('input[type="radio"]').name;
+            if (!answers[inputName]) {
+                alert('⚠️ Merci de sélectionner une option avant de continuer');
+                return;
+            }
+            
+            currentPageElement.classList.remove('active');
+            nextPageElement.classList.add('active');
+            currentPage = pageNumber;
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = (currentPage / totalPages) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('stepIndicator').textContent = `Question ${currentPage} sur ${totalPages}`;
+        }
+
+        function showResult() {
+            const currentPageElement = document.getElementById('page5');
+            const inputName = currentPageElement.querySelector('input[type="radio"]').name;
+            if (!answers[inputName]) {
+                alert('⚠️ Merci de sélectionner une option avant de continuer');
+                return;
+            }
+            
+            document.getElementById('page5').classList.remove('active');
+            document.getElementById('pageResult').classList.add('active');
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('stepIndicator').textContent = '✅ Questionnaire terminé';
+            
+            console.log('Réponses collectées:', answers);
+        }
+    </script>
+</body>
+</html>
